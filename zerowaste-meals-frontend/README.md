@@ -14,7 +14,16 @@ Frontend for **ZeroWaste Meals**, a food redistribution platform that connects f
 - Node.js 18+
 - npm
 
-The backend is expected to run locally on `http://localhost:8080` (Spring Boot app: `zerowaste-meals-backend`).
+The backend is a Spring Boot app (`zerowaste-meals-backend`) that runs locally during development and is deployed to Render in production.
+
+## Environment Variables
+
+The API base URL is driven entirely by the `VITE_API_URL` environment variable. Copy `.env.example` to set up your config:
+
+| File               | Used for     | Value                                          |
+| ------------------ | ------------ | ---------------------------------------------- |
+| `.env.local`       | Local dev    | `VITE_API_URL=http://localhost:8080/api`       |
+| `.env.production`  | Render build | `VITE_API_URL=https://zerowaste-meals-backend.onrender.com/api` |
 
 ## Getting Started
 
@@ -23,7 +32,7 @@ npm install
 npm run dev
 ```
 
-The dev server runs on `http://localhost:5173` and proxies `/api` requests to the Spring Boot backend on port `8080`.
+The dev server runs on `http://localhost:5173` and calls the API configured by `VITE_API_URL` in `.env.local`.
 
 ## Build for Production
 

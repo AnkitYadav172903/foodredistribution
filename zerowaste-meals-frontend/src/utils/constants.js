@@ -45,6 +45,6 @@ export const STORAGE_KEYS = {
   USER: 'zerowaste_meals_user',
 }
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
+export const API_BASE_URL = import.meta.env.VITE_API_URL
 
 export const MAX_IMAGE_SIZE_MB = 5
