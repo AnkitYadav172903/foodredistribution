@@ -7,6 +7,7 @@ import { ImagePreviewModal } from '../../components/common/Modal'
 import { SkeletonCard } from '../../components/common/Skeleton'
 import donationService from '../../services/donationService'
 import { useToast } from '../../context/ToastContext'
+import { resolveMediaUrl } from '../../utils/media'
 import emptyDonationImage from '../../assets/illustrations/empty-cart.png'
 import defaultFoodImage from '../../assets/images/rice.jpg'
 
@@ -94,7 +95,7 @@ export function MyListings() {
       <ImagePreviewModal
         open={Boolean(preview)}
         onClose={() => setPreview(null)}
-        src={preview?.imageUrl || defaultFoodImage}
+        src={resolveMediaUrl(preview?.imageUrl) || defaultFoodImage}
         alt={preview?.title}
       />
     </div>

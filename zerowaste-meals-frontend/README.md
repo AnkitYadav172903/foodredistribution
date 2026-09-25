@@ -41,6 +41,14 @@ npm run build
 npm run preview
 ```
 
+## Deploy to Vercel
+
+1. Import this folder (`zerowaste-meals-frontend`) as the project on Vercel.
+2. Framework preset: **Vite** (auto-detected). Build command `npm run build`, output directory `dist`.
+3. `vercel.json` is already included — it rewrites every route to `index.html` so deep links and refreshes work (no blank screen).
+4. The production API URL comes from `.env.production` (`VITE_API_URL`). You can also override it in Vercel's project settings → Environment Variables.
+5. The Render backend must allow the Vercel origin — the backend CORS config already allows all origins.
+
 ## Project Structure
 
 ```

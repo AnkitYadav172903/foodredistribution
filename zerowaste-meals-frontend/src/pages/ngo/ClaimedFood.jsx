@@ -6,6 +6,7 @@ import Button from '../../components/common/Button'
 import { SkeletonCard } from '../../components/common/Skeleton'
 import claimService from '../../services/claimService'
 import { useToast } from '../../context/ToastContext'
+import { resolveMediaUrl } from '../../utils/media'
 import emptyCartImage from '../../assets/illustrations/empty-cart.png'
 
 const FILTERS = [
@@ -112,7 +113,7 @@ export function ClaimedFood() {
             const listing = {
               id: claim.donationId,
               title: claim.donationTitle,
-              imageUrl: claim.imageUrl,
+              imageUrl: resolveMediaUrl(claim.imageUrl),
               location: claim.location,
               donorName: claim.donorName,
               status: claim.status,

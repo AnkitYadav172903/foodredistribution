@@ -9,6 +9,7 @@ import donationService from '../../services/donationService'
 import uploadService from '../../services/uploadService'
 import { useToast } from '../../context/ToastContext'
 import { LISTING_STATUS } from '../../utils/constants'
+import { resolveMediaUrl } from '../../utils/media'
 import uploadIcon from '../../assets/icons/upload.png'
 import locationIcon from '../../assets/icons/location.png'
 import pickupLocationImage from '../../assets/illustrations/pickup-location.png'
@@ -238,7 +239,7 @@ export function DonorPage() {
       <ImagePreviewModal
         open={Boolean(preview)}
         onClose={() => setPreview(null)}
-        src={preview?.imageUrl || defaultFoodImage}
+        src={resolveMediaUrl(preview?.imageUrl) || defaultFoodImage}
         alt={preview?.title}
       />
     </div>

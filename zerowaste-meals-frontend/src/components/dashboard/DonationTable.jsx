@@ -5,6 +5,7 @@ import { ImagePreviewModal } from '../common/Modal'
 import EmptyState from '../common/EmptyState'
 import { CATEGORY_LABELS, LISTING_STATUS, STATUS_LABELS } from '../../utils/constants'
 import { formatDateTime } from '../../utils/formatDate'
+import { resolveMediaUrl } from '../../utils/media'
 import defaultFoodImage from '../../assets/images/rice.jpg'
 import emptyCart from '../../assets/illustrations/empty-cart.png'
 
@@ -59,7 +60,7 @@ export function DonationTable({ listings, loading, role, onClaim }) {
                   >
                     <span className="h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200">
                       <img
-                        src={listing.imageUrl || defaultFoodImage}
+                        src={resolveMediaUrl(listing.imageUrl) || defaultFoodImage}
                         alt={listing.title}
                         className="h-full w-full object-cover"
                         loading="lazy"
@@ -120,7 +121,7 @@ export function DonationTable({ listings, loading, role, onClaim }) {
           >
             <span className="h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-gray-100">
               <img
-                src={listing.imageUrl || defaultFoodImage}
+                src={resolveMediaUrl(listing.imageUrl) || defaultFoodImage}
                 alt={listing.title}
                 className="h-full w-full object-cover"
                 loading="lazy"
@@ -147,7 +148,7 @@ export function DonationTable({ listings, loading, role, onClaim }) {
       <ImagePreviewModal
         open={Boolean(preview)}
         onClose={() => setPreview(null)}
-        src={preview?.imageUrl || defaultFoodImage}
+        src={resolveMediaUrl(preview?.imageUrl) || defaultFoodImage}
         alt={preview?.title}
       />
     </>

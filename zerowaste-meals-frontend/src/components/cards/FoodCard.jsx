@@ -1,6 +1,7 @@
 import { Badge } from '../common/Badge'
 import { CATEGORY_LABELS, LISTING_STATUS, STATUS_LABELS } from '../../utils/constants'
 import { timeAgo, formatDateTime, timeUntil } from '../../utils/formatDate'
+import { resolveMediaUrl } from '../../utils/media'
 import defaultFoodImage from '../../assets/images/rice.jpg'
 
 const STATUS_COLORS = {
@@ -29,7 +30,7 @@ export function FoodCard({ listing, onClaim, claimed }) {
     <article className="group overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lift">
       <div className="relative h-44 w-full overflow-hidden bg-gray-100">
         <img
-          src={imageUrl || defaultFoodImage}
+          src={resolveMediaUrl(imageUrl) || defaultFoodImage}
           alt={title}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
           loading="lazy"

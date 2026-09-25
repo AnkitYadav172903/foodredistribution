@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import uploadIcon from '../../assets/icons/upload.png'
 import { MAX_IMAGE_SIZE_MB } from '../../utils/constants'
+import { resolveMediaUrl } from '../../utils/media'
 
 export function ImageUploader({ value, onChange, label = 'Upload image', className = '' }) {
   const inputRef = useRef(null)
@@ -18,7 +19,8 @@ export function ImageUploader({ value, onChange, label = 'Upload image', classNa
     onChange(file)
   }
 
-  const previewUrl = typeof value === 'string' ? value : value ? URL.createObjectURL(value) : null
+  const previewUrl =
+    typeof value === 'string' ? resolveMediaUrl(value) : value ? URL.createObjectURL(value) : null
 
   return (
     <div className={className}>

@@ -1,6 +1,7 @@
 import Badge from '../common/Badge'
 import { CATEGORY_LABELS, LISTING_STATUS, STATUS_LABELS } from '../../utils/constants'
 import { formatDateTime } from '../../utils/formatDate'
+import { resolveMediaUrl } from '../../utils/media'
 import defaultFoodImage from '../../assets/images/pizza.jpg'
 
 const STATUS_COLORS = {
@@ -22,7 +23,7 @@ export function ListingCard({ listing, onEdit, onDelete, actions }) {
       <div className="flex items-start gap-4">
         <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-100">
           <img
-            src={imageUrl || defaultFoodImage}
+            src={resolveMediaUrl(imageUrl) || defaultFoodImage}
             alt={title}
             className="h-full w-full object-cover"
             loading="lazy"

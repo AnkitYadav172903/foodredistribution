@@ -9,17 +9,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('recharts') || id.includes('d3-') || id.includes('victory')) {
-              return 'charts'
-            }
-            if (id.includes('react') || id.includes('scheduler')) {
-              return 'react-vendor'
-            }
-            return 'vendor'
-          }
-          return undefined
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom', 'scheduler'],
+          charts: ['recharts'],
         },
       },
     },
