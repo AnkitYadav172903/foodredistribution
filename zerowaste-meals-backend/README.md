@@ -46,11 +46,16 @@ The API starts on `http://localhost:8080`.
 
 | Setting                 | Location                                    | Notes                                   |
 | ----------------------- | ------------------------------------------- | --------------------------------------- |
-| JWT secret              | `JWT_SECRET` env var                        | Required. The app refuses to start on the built-in default |
+| JWT secret              | `JWT_SECRET` env var                        | Required, no default. Startup fails if unset or set to a known public value |
 | Token lifetime          | `jwt.expiration` (default 24h, in ms)       |                                         |
 | REST CORS origins       | `CORS_ALLOWED_ORIGINS` env var              | Comma separated. Defaults to `localhost:5173,localhost:4173`. Set your Vercel domain(s) in production |
 | WebSocket origins       | `WEBSOCKET_ALLOWED_ORIGINS` env var         | Comma separated. Defaults to `*`; the JWT in the STOMP CONNECT frame is what actually gates access |
 | Upload directory        | `UPLOAD_DIR` env var (default `uploads`)    |                                         |
+
+There is no built-in JWT secret. `jwt.secret` resolves to empty unless `JWT_SECRET` is set, and the
+app then fails to start rather than signing tokens with a value that is public knowledge. Locally
+the value comes from the gitignored `.env`; when deployed, set it in the host's environment
+settings (on Render: **Environment** → **Add Environment Variable**).
 
 Generate a strong secret with:
 
@@ -60,8 +65,9 @@ openssl rand -hex 32
 
 ### Production checklist
 
-- `JWT_SECRET` must be set. Starting with the default value throws at boot, because that value is
-  public knowledge and would let anyone mint a token for any account.
+- `JWT_SECRET` must be set. Startup fails with a configuration error if it is missing, or if it is
+  set to the well-known placeholder that used to ship as the default, because anyone could mint a
+  token for any account with that value.
 - `CORS_ALLOWED_ORIGINS` must list the deployed frontend origin, otherwise the browser gets no
   `Access-Control-Allow-Origin` and every API call fails. The allowed origins are logged at startup.
   Set it to `*` only to restore the previous allow-everything behaviour.

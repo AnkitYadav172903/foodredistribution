@@ -13,8 +13,9 @@ public class JwtService {
     private static final Logger log = LoggerFactory.getLogger(JwtService.class);
 
     /**
-     * The placeholder from application.properties. It is public knowledge, so anyone could mint a
-     * valid token for any account with it — the app refuses to start while it is in use.
+     * The value that used to ship as the built-in default in application.properties. It is in this
+     * public repository, so anyone could mint a valid token for any account with it. It is no longer
+     * a default anywhere; this constant only guards against it being reintroduced as one.
      */
     private static final String INSECURE_DEFAULT_SECRET = "zerowaste_meals_super_secret_key_2026";
 
@@ -32,7 +33,9 @@ public class JwtService {
     private static void validateSecret(String secret, boolean allowInsecureDefaultSecret) {
         if (secret == null || secret.isBlank()) {
             throw new IllegalStateException(
-                    "jwt.secret is empty. Set the JWT_SECRET environment variable to a strong random value.");
+                    "JWT secret is not configured, so the app refuses to start. Set the JWT_SECRET "
+                            + "environment variable to a strong random value and redeploy "
+                            + "(for example: openssl rand -hex 32).");
         }
         if (!INSECURE_DEFAULT_SECRET.equals(secret)) {
             return;
@@ -42,10 +45,10 @@ public class JwtService {
             return;
         }
         throw new IllegalStateException(
-                "jwt.secret is still the built-in default, which is public knowledge and would let anyone "
-                        + "forge a token for any account. Set the JWT_SECRET environment variable. To run "
-                        + "locally with the default on purpose, set "
-                        + "app.security.allow-insecure-default-jwt-secret=true.");
+                "JWT_SECRET is set to a known public value, which would let anyone forge a token for any "
+                        + "account. Set the JWT_SECRET environment variable to a strong random value and "
+                        + "redeploy. To run against this value on purpose, set "
+                        + "ALLOW_INSECURE_DEFAULT_JWT_SECRET=true.");
     }
 
     public String generateToken(UserDetails userDetails) {
