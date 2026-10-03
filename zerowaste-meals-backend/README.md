@@ -36,21 +36,31 @@ Tables are created automatically (`spring.jpa.hibernate.ddl-auto=update`).
 
 ## Running
 
+Copy the environment template and fill in your own values:
+
+```bash
+cp .env.example .env
+```
+
+Then start the API:
+
 ```bash
 ./mvnw spring-boot:run
 ```
 
-The API starts on `http://localhost:8080`.
+The API starts on `http://localhost:8080`. `.env` is git-ignored; it is read directly by Spring Boot
+via `spring.config.import=optional:file:.env[.properties]`, so no extra tooling is required.
 
 ## Default Configuration
 
 | Setting                 | Location                                    | Notes                                   |
 | ----------------------- | ------------------------------------------- | --------------------------------------- |
-| JWT secret              | `JWT_SECRET` env var                        | Required, no default. Startup fails if unset or set to a known public value |
+| JWT secret              | `JWT_SECRET` env var                        | Required, no default. Minimum 32 chars. Startup fails if unset, too short, or set to a known public value |
 | Token lifetime          | `jwt.expiration` (default 24h, in ms)       |                                         |
 | REST CORS origins       | `CORS_ALLOWED_ORIGINS` env var              | Comma separated. Defaults to `localhost:5173,localhost:4173`. Set your Vercel domain(s) in production |
 | WebSocket origins       | `WEBSOCKET_ALLOWED_ORIGINS` env var         | Comma separated. Defaults to `*`; the JWT in the STOMP CONNECT frame is what actually gates access |
 | Upload directory        | `UPLOAD_DIR` env var (default `uploads`)    |                                         |
+| HTTP port               | `PORT` env var (default `8080`)             | Render injects `PORT` automatically     |
 
 There is no built-in JWT secret. `jwt.secret` resolves to empty unless `JWT_SECRET` is set, and the
 app then fails to start rather than signing tokens with a value that is public knowledge. Locally
@@ -65,9 +75,10 @@ openssl rand -hex 32
 
 ### Production checklist
 
-- `JWT_SECRET` must be set. Startup fails with a configuration error if it is missing, or if it is
-  set to the well-known placeholder that used to ship as the default, because anyone could mint a
-  token for any account with that value.
+- `JWT_SECRET` must be set and at least 32 characters. Startup fails with a configuration error if it
+  is missing, too short, or set to the well-known placeholder that used to ship as the default,
+  because anyone could mint a token for any account with that value. Rotating it invalidates every
+  issued token, so all users must sign in again.
 - `CORS_ALLOWED_ORIGINS` must list the deployed frontend origin, otherwise the browser gets no
   `Access-Control-Allow-Origin` and every API call fails. The allowed origins are logged at startup.
   Set it to `*` only to restore the previous allow-everything behaviour.

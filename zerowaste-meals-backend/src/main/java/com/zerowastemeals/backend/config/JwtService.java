@@ -19,6 +19,13 @@ public class JwtService {
      */
     private static final String INSECURE_DEFAULT_SECRET = "zerowaste_meals_super_secret_key_2026";
 
+    /**
+     * Tokens are signed with HMAC-SHA256. JwtUtil.signingKey() will happily SHA-256 any string into
+     * a usable 256-bit key, so without a floor a one-character secret would pass unnoticed. Requiring
+     * 32 characters keeps the key material at 256 bits of actual entropy.
+     */
+    private static final int MIN_SECRET_LENGTH = 32;
+
     private final String secret;
     private final long expirationMs;
 
@@ -35,6 +42,12 @@ public class JwtService {
             throw new IllegalStateException(
                     "JWT secret is not configured, so the app refuses to start. Set the JWT_SECRET "
                             + "environment variable to a strong random value and redeploy "
+                            + "(for example: openssl rand -hex 32).");
+        }
+        if (secret.length() < MIN_SECRET_LENGTH) {
+            throw new IllegalStateException(
+                    "JWT_SECRET is only " + secret.length() + " characters long; at least " + MIN_SECRET_LENGTH
+                            + " are required for HMAC-SHA256. Set JWT_SECRET to a strong random value and redeploy "
                             + "(for example: openssl rand -hex 32).");
         }
         if (!INSECURE_DEFAULT_SECRET.equals(secret)) {
