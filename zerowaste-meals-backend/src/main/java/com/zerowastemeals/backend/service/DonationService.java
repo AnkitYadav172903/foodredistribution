@@ -8,8 +8,10 @@ import com.zerowastemeals.backend.entity.Role;
 import com.zerowastemeals.backend.entity.User;
 import com.zerowastemeals.backend.exception.ResourceNotFoundException;
 import com.zerowastemeals.backend.exception.UnauthorizedException;
+import com.zerowastemeals.backend.notification.event.DonationCreatedEvent;
 import com.zerowastemeals.backend.repository.ClaimRepository;
 import com.zerowastemeals.backend.repository.DonationRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +26,14 @@ public class DonationService {
 
     private final DonationRepository donationRepository;
     private final ClaimRepository claimRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public DonationService(DonationRepository donationRepository, ClaimRepository claimRepository) {
+    public DonationService(DonationRepository donationRepository,
+                           ClaimRepository claimRepository,
+                           ApplicationEventPublisher eventPublisher) {
         this.donationRepository = donationRepository;
         this.claimRepository = claimRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<DonationResponse> getListings(DonationStatus status) {
@@ -51,7 +57,19 @@ public class DonationService {
         apply(donation, request);
         donation.setDonor(donor);
         donation.setStatus(DonationStatus.AVAILABLE);
-        return toResponse(donationRepository.save(donation));
+        Donation saved = donationRepository.save(donation);
+
+        // Fans out to NGOs in the pickup area once this transaction commits.
+        eventPublisher.publishEvent(new DonationCreatedEvent(
+                saved.getId(),
+                donor.getId(),
+                donor.getName(),
+                saved.getTitle(),
+                saved.getLocation(),
+                saved.getQuantity(),
+                saved.getUnit()));
+
+        return toResponse(saved);
     }
 
     @Transactional

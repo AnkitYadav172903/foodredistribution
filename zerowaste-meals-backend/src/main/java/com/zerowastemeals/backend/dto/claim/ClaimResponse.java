@@ -14,7 +14,8 @@ public record ClaimResponse(
         String location,
         DonationStatus status,
         String ngoName,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        LocalDateTime pickupStartedAt
 ) {
 
     public static ClaimResponse from(Claim claim) {
@@ -27,7 +28,8 @@ public record ClaimResponse(
                 claim.getDonation().getLocation(),
                 claim.getStatus(),
                 claim.getNgo().getName(),
-                claim.getCreatedAt()
+                claim.getCreatedAt(),
+                claim.getPickupStartedAt()
         );
     }
 }

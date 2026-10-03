@@ -13,6 +13,8 @@ const Register = lazy(() => import('../pages/auth/Register').then((m) => ({ defa
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard').then((m) => ({ default: m.Dashboard })))
 const DonorPage = lazy(() => import('../pages/donor/DonorPage').then((m) => ({ default: m.DonorPage })))
 const MyListings = lazy(() => import('../pages/donor/MyListings').then((m) => ({ default: m.MyListings })))
+const DonorNotifications = lazy(() => import('../pages/donor/Notifications').then((m) => ({ default: m.Notifications })))
+const NgoNotifications = lazy(() => import('../pages/ngo/Notifications').then((m) => ({ default: m.Notifications })))
 const AvailableFood = lazy(() => import('../pages/ngo/AvailableFood').then((m) => ({ default: m.AvailableFood })))
 const ClaimedFood = lazy(() => import('../pages/ngo/ClaimedFood').then((m) => ({ default: m.ClaimedFood })))
 const AdminDashboard = lazy(() => import('../pages/admin/AdminDashboard').then((m) => ({ default: m.AdminDashboard })))
@@ -33,6 +35,16 @@ function RoleHome() {
   if (user.role === ROLES.ADMIN) return <Navigate to="/admin" replace />
   if (user.role === ROLES.NGO) return <Navigate to="/available-food" replace />
   return <Navigate to="/dashboard" replace />
+}
+
+/**
+ * Single /notifications entry point. Donors and NGOs get their own page, since the empty state
+ * points back at a different place for each.
+ */
+function NotificationsByRole() {
+  const { user } = useAuth()
+  if (user?.role === ROLES.NGO) return <NgoNotifications />
+  return <DonorNotifications />
 }
 
 export function AppRoutes() {
@@ -84,6 +96,14 @@ export function AppRoutes() {
             element={
               <ProtectedRoute role={ROLES.NGO}>
                 <ClaimedFood />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <NotificationsByRole />
               </ProtectedRoute>
             }
           />

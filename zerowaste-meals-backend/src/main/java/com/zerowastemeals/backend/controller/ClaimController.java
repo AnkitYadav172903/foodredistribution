@@ -43,6 +43,12 @@ public class ClaimController {
         claimService.cancel(claimId, currentUser(authentication));
     }
 
+    @PostMapping("/api/claims/{claimId}/start-pickup")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void startPickup(@PathVariable Long claimId, Authentication authentication) {
+        claimService.startPickup(claimId, currentUser(authentication));
+    }
+
     @PostMapping("/api/claims/{claimId}/confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void confirmCollection(@PathVariable Long claimId, Authentication authentication) {

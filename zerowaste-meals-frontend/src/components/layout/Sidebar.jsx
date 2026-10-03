@@ -7,6 +7,7 @@ import locationIcon from '../../assets/icons/location.png'
 import userIcon from '../../assets/icons/user.png'
 import uploadIcon from '../../assets/icons/upload.png'
 import analyticsIcon from '../../assets/illustrations/analytics.png'
+import notificationIcon from '../../assets/illustrations/notification.png'
 import { ROLES } from '../../utils/constants'
 import useAuth from '../../hooks/useAuth'
 
@@ -23,6 +24,7 @@ export function Sidebar({ collapsed, mobileOpen, onClose, onToggle }) {
     { to: '/my-listings', label: 'My Listings', icon: locationIcon, roles: [ROLES.DONOR] },
     { to: '/available-food', label: 'Claim Food', icon: claimIcon, roles: [ROLES.NGO] },
     { to: '/claimed-food', label: 'My Claims', icon: uploadIcon, roles: [ROLES.NGO] },
+    { to: '/notifications', label: 'Notifications', icon: notificationIcon, roles: [ROLES.DONOR, ROLES.NGO] },
     { to: '/reports', label: 'Reports', icon: analyticsIcon, roles: [ROLES.DONOR, ROLES.NGO, ROLES.ADMIN] },
     { to: '/settings', label: 'Settings', icon: userIcon, roles: [ROLES.DONOR, ROLES.NGO, ROLES.ADMIN] },
   ]

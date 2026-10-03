@@ -54,6 +54,20 @@ export function ClaimedFood() {
     }
   }
 
+  /**
+   * Marks the pickup as under way. The backend rejects a second call for the same claim, so the
+   * button disappears once the donor has been told.
+   */
+  const handleStartPickup = async (claimId) => {
+    try {
+      await claimService.startPickup(claimId)
+      toast.success('Donor notified that pickup is under way.')
+      await loadClaims()
+    } catch (err) {
+      toast.error(err.message || 'Could not start pickup.')
+    }
+  }
+
   const counts = useMemo(() => {
     return {
       ALL: claims.length,
@@ -125,9 +139,20 @@ export function ClaimedFood() {
                 listing={listing}
                 actions={
                   claim.status === 'CLAIMED' ? (
-                    <Button variant="danger" size="sm" onClick={() => handleCancel(claim.id)}>
-                      Cancel claim
-                    </Button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {claim.pickupStartedAt ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-xl bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-700">
+                          Pickup in progress
+                        </span>
+                      ) : (
+                        <Button size="sm" onClick={() => handleStartPickup(claim.id)}>
+                          Start pickup
+                        </Button>
+                      )}
+                      <Button variant="danger" size="sm" onClick={() => handleCancel(claim.id)}>
+                        Cancel claim
+                      </Button>
+                    </div>
                   ) : null
                 }
               />

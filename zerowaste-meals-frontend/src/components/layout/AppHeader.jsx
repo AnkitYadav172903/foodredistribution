@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 import Avatar from '../common/Avatar'
-import notificationIcon from '../../assets/illustrations/notification.png'
+import NotificationBell from '../notification/NotificationBell'
 import defaultAvatar from '../../assets/avatar/default-avatar.png'
 
 export function AppHeader({ onMenuClick, title = 'Dashboard' }) {
@@ -61,16 +61,7 @@ export function AppHeader({ onMenuClick, title = 'Dashboard' }) {
           />
         </div>
 
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 ring-1 ring-gray-200 transition hover:bg-gray-100"
-        >
-          <img src={notificationIcon} alt="" className="h-6 w-6 object-contain" />
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white">
-            3
-          </span>
-        </button>
+        <NotificationBell />
 
         <div className="relative" ref={wrapRef}>
           <button

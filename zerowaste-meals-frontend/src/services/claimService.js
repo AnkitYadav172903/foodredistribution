@@ -9,6 +9,10 @@ export const claimService = {
     return api.post(`/claims/${claimId}/cancel`)
   },
 
+  async startPickup(claimId) {
+    return api.post(`/claims/${claimId}/start-pickup`)
+  },
+
   async getMyClaims(params) {
     return api.get('/claims/my-claims', { params })
   },

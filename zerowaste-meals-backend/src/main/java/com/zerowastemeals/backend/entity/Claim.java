@@ -44,6 +44,15 @@ public class Claim {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * When the NGO marked the pickup as under way. Null until the NGO calls start-pickup.
+     *
+     * <p>Kept as its own timestamp rather than a new {@link DonationStatus} so the listing stays
+     * CLAIMED throughout: every existing status filter, badge and admin count keeps its meaning.
+     */
+    @Column(name = "pickup_started_at")
+    private LocalDateTime pickupStartedAt;
+
     @PrePersist
     void onCreate() {
         if (this.createdAt == null) {
@@ -100,5 +109,13 @@ public class Claim {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getPickupStartedAt() {
+        return pickupStartedAt;
+    }
+
+    public void setPickupStartedAt(LocalDateTime pickupStartedAt) {
+        this.pickupStartedAt = pickupStartedAt;
     }
 }

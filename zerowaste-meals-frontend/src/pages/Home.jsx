@@ -230,7 +230,7 @@ export function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {WORK_STEPS.map((step, idx) => (
+            {WORK_STEPS.map((step) => (
               <div
                 key={step.title}
                 className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-white p-7 shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lift"

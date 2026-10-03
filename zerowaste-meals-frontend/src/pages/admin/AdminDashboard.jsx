@@ -46,7 +46,7 @@ export function AdminDashboard() {
       try {
         const data = await donationService.getListings()
         if (mounted) setListings(data || [])
-      } catch (err) {
+      } catch {
         if (mounted) toast.info('Live admin data unavailable right now — showing a preview.')
       } finally {
         if (mounted) setLoading(false)

@@ -82,7 +82,7 @@ export function Dashboard() {
       ])
       setListings(listingsData || [])
       setClaims(claimsData || [])
-    } catch (err) {
+    } catch {
       toast.info('Live data is unavailable right now — showing a preview.')
     } finally {
       setLoading(false)

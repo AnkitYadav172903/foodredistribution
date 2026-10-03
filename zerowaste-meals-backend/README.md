@@ -46,15 +46,26 @@ The API starts on `http://localhost:8080`.
 
 | Setting                 | Location                                    | Notes                                   |
 | ----------------------- | ------------------------------------------- | --------------------------------------- |
-| JWT secret              | `jwt.secret` in application.properties      | Plain string accepted; change it in production |
+| JWT secret              | `JWT_SECRET` env var                        | Required. The app refuses to start on the built-in default |
 | Token lifetime          | `jwt.expiration` (default 24h, in ms)       |                                         |
-| CORS origins            | `SecurityConfig` (default `localhost:5173`) | Vite dev server                         |
+| REST CORS origins       | `CORS_ALLOWED_ORIGINS` env var              | Comma separated. Defaults to `localhost:5173,localhost:4173`. Set your Vercel domain(s) in production |
+| WebSocket origins       | `WEBSOCKET_ALLOWED_ORIGINS` env var         | Comma separated. Defaults to `*`; the JWT in the STOMP CONNECT frame is what actually gates access |
+| Upload directory        | `UPLOAD_DIR` env var (default `uploads`)    |                                         |
 
 Generate a strong secret with:
 
 ```bash
 openssl rand -hex 32
 ```
+
+### Production checklist
+
+- `JWT_SECRET` must be set. Starting with the default value throws at boot, because that value is
+  public knowledge and would let anyone mint a token for any account.
+- `CORS_ALLOWED_ORIGINS` must list the deployed frontend origin, otherwise the browser gets no
+  `Access-Control-Allow-Origin` and every API call fails. The allowed origins are logged at startup.
+  Set it to `*` only to restore the previous allow-everything behaviour.
+- `DATABASE_URL`, `DATABASE_USER`, `DATABASE_PASSWORD` must be set for Neon.
 
 ## API Overview
 

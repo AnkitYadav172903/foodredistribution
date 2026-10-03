@@ -47,7 +47,7 @@ npm run preview
 2. Framework preset: **Vite** (auto-detected). Build command `npm run build`, output directory `dist`.
 3. `vercel.json` is already included — it rewrites every route to `index.html` so deep links and refreshes work (no blank screen).
 4. The production API URL comes from `.env.production` (`VITE_API_URL`). You can also override it in Vercel's project settings → Environment Variables.
-5. The Render backend must allow the Vercel origin — the backend CORS config already allows all origins.
+5. The Render backend only accepts the origins listed in its `CORS_ALLOWED_ORIGINS` environment variable (default: the local Vite dev servers). Set that on Render to your Vercel domain, otherwise the browser blocks every API call.
 
 ## Project Structure
 

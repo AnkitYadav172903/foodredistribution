@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import { Badge } from '../common/Badge'
 import { CATEGORY_LABELS, LISTING_STATUS, STATUS_LABELS } from '../../utils/constants'
 import { timeAgo, formatDateTime, timeUntil } from '../../utils/formatDate'
@@ -15,16 +16,21 @@ const STATUS_COLORS = {
 export function FoodCard({ listing, onClaim, claimed }) {
   const { id, title, category, quantity, unit, imageUrl, location, createdAt, status, pickupBy } = listing
 
-  const expires = (() => {
+  // The wall clock is read once, lazily, rather than during render: Date.now() is an impure
+  // function, so reading it in the render body can yield a different result on a re-render.
+  // This matches the card's previous behaviour, which also never re-evaluated the countdown.
+  const [now] = useState(() => Date.now())
+
+  const expires = useMemo(() => {
     if (!pickupBy) return null
-    const diff = new Date(pickupBy).getTime() - Date.now()
+    const diff = new Date(pickupBy).getTime() - now
     if (diff <= 0) return { label: 'Expiring soon', urgent: true }
     const hours = Math.ceil(diff / 3600000)
     return {
       label: hours <= 12 ? `Pickup in ~${hours}h` : `Pickup by ${formatDateTime(pickupBy)}`,
       urgent: hours <= 6,
     }
-  })()
+  }, [pickupBy, now])
 
   return (
     <article className="group overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lift">
